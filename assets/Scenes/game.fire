@@ -177,7 +177,7 @@
       "array": [
         0,
         0,
-        554.2562584220408,
+        504.8871714140742,
         0,
         0,
         0,
@@ -711,7 +711,7 @@
       "y": 0
     },
     "_angularVelocity": 0,
-    "_fixedRotation": true,
+    "_fixedRotation": false,
     "enabledContactListener": false,
     "bullet": false,
     "awakeOnLoad": true,

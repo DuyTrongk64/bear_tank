@@ -1,4 +1,3 @@
-// import module cc to use cc.Enum
 const {ccclass, property} = cc._decorator;
 
 @ccclass

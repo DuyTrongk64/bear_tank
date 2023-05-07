@@ -61,9 +61,11 @@ export default class NewClass extends cc.Component {
         let localPos = this.node.convertToNodeSpaceAR(mousePos);
         let angle = localPos.signAngle(tankPos);
         let angleDegrees  = cc.misc.radiansToDegrees(angle);
-        angleDegrees = (angleDegrees * -1)-45;
+        angleDegrees +=35;
         // Xoay sprite của Player
         //this.player.getComponent('Player').node.angle = angleDegrees;
-        this.player.getComponent('Player').node.rotation = -angleDegrees;
+        this.player.getComponent('Player').node.angle = -angleDegrees;
+
+        this.player.getComponent('Player').mousePos = this.node.convertToNodeSpaceAR(event.getLocation());
     }
 }
