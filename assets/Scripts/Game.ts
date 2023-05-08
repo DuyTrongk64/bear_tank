@@ -24,7 +24,13 @@ export default class NewClass extends cc.Component {
 
     private isPlaying: boolean;
 
-    private speed = 500;
+    private speed = 50;
+
+    private angleOld: number = 0;
+
+    private angleD: number;
+
+    private deltaTime: number;
     onLoad() {
         let physics_manager = cc.director.getPhysicsManager();
         physics_manager.enabled = true;
@@ -43,15 +49,18 @@ export default class NewClass extends cc.Component {
         
     }
 
-    update(dt) {
-        
-    }
+    
 
     private onMouseDown(event: cc.Event.EventMouse) {
-        let gunPos = this.player.getComponent('Player').getGunPos();
-        let playerPos = this.player.getComponent('Player').node.getPosition();
-        let direc = new cc.Vec2(gunPos.x-playerPos.x,gunPos.y-playerPos.y);
-        this.player.getComponent('Player').Rigid_Body.applyForceToCenter(cc.v2(direc.x*this.speed,direc.y*this.speed),true);
+        // let gunPos = this.player.getComponent('Player').getGunPos();
+        // console.log(`gun pos: ${gunPos}`);
+        // let playerPos = this.player.getComponent('Player').node.getPosition();
+        // console.log(`playerPos: ${playerPos}`);
+        // let direc = playerPos.sub(gunPos);
+        // console.log(`direc: ${direc}`);
+        // //this.player.getComponent('Player').Rigid_Body.applyForceToCenter(cc.v2(direc.x*this.speed,direc.y*this.speed),true);
+        // let newPosition = this.player.node.position.add(direc.multiplyScalar(this.speed*this.deltaTime));
+        // this.player.node.setPosition(newPosition);
     }
 
     onMouseMove(event: cc.Event.EventMouse){
@@ -61,11 +70,21 @@ export default class NewClass extends cc.Component {
         let localPos = this.node.convertToNodeSpaceAR(mousePos);
         let angle = localPos.signAngle(tankPos);
         let angleDegrees  = cc.misc.radiansToDegrees(angle);
-        angleDegrees +=35;
-        // Xoay sprite của Player
-        //this.player.getComponent('Player').node.angle = angleDegrees;
+        //angleDegrees +=25;
+        this.angleD = angleDegrees - this.angleOld;
+        this.angleOld = angleDegrees;
+        //console.log(this.angleD);
+        // // Xoay sprite của Player
         this.player.getComponent('Player').node.angle = -angleDegrees;
 
-        this.player.getComponent('Player').mousePos = this.node.convertToNodeSpaceAR(event.getLocation());
+    }
+
+    rotatePlayer(dt: number){
+        let rotateAction = cc.rotateBy(dt, this.angleD*dt);
+        this.player.node.runAction(rotateAction);
+    }
+    update(dt) {
+        //this.deltaTime = dt;
+        //this.rotatePlayer(dt);
     }
 }
