@@ -13,10 +13,8 @@ export default class NewClass extends cc.Component {
     @property(cc.Prefab)
     bee_blPrefab: cc.Prefab= null;
 
-    @property({
-        type: Player
-    })
-    player: Player = null;
+    @property(cc.Node)
+    player: cc.Node = null;
 
     private beeArray: Array<cc.Node> = [];
 
@@ -52,39 +50,41 @@ export default class NewClass extends cc.Component {
     
 
     private onMouseDown(event: cc.Event.EventMouse) {
-        // let gunPos = this.player.getComponent('Player').getGunPos();
-        // console.log(`gun pos: ${gunPos}`);
-        // let playerPos = this.player.getComponent('Player').node.getPosition();
+        let gunPos = this.player.getComponent('Player').getGunPos();
+        console.log(`gun pos: ${gunPos}`);
+        // cc.tween(this.player)
+        // .by(1,{position: gunPos})
+        // .start();
+        // this.player.movePlayer(gunPos);
+        // let playerPos = this.player.getComponent('Player').getPLayerPos();
         // console.log(`playerPos: ${playerPos}`);
         // let direc = playerPos.sub(gunPos);
         // console.log(`direc: ${direc}`);
-        // //this.player.getComponent('Player').Rigid_Body.applyForceToCenter(cc.v2(direc.x*this.speed,direc.y*this.speed),true);
+        // this.player.getComponent('Player').Rigid_Body.applyForceToCenter(cc.v2(direc.x*this.speed,direc.y*this.speed),true);
         // let newPosition = this.player.node.position.add(direc.multiplyScalar(this.speed*this.deltaTime));
         // this.player.node.setPosition(newPosition);
     }
 
     onMouseMove(event: cc.Event.EventMouse){
-        let playerPos = this.player.getComponent('Player').node.getPosition();
+        let playerPos = this.player.getPosition();
         let tankPos = new cc.Vec2(playerPos.x,playerPos.y);
         let mousePos = event.getLocation();
         let localPos = this.node.convertToNodeSpaceAR(mousePos);
         let angle = localPos.signAngle(tankPos);
         let angleDegrees  = cc.misc.radiansToDegrees(angle);
-        //angleDegrees +=25;
+        angleDegrees +=5;
         this.angleD = angleDegrees - this.angleOld;
         this.angleOld = angleDegrees;
         //console.log(this.angleD);
         // // Xoay sprite của Player
-        this.player.getComponent('Player').node.angle = -angleDegrees;
-
+        this.player.angle = -angleDegrees;
     }
 
     rotatePlayer(dt: number){
         let rotateAction = cc.rotateBy(dt, this.angleD*dt);
-        this.player.node.runAction(rotateAction);
+        this.player.runAction(rotateAction);
     }
     update(dt) {
-        //this.deltaTime = dt;
-        //this.rotatePlayer(dt);
+        
     }
 }

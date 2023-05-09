@@ -28,8 +28,16 @@ export default class Player extends cc.Component {
         return this.gun.getPosition();
     }
 
+    movePlayer(direction: cc.Vec2){
+        let direc = new cc.Vec3(direction.x,direction.y,0);
+        let newPosition = this.node.position.add(direc.mul(this.speed));
+        this.node.setPosition(newPosition);
+    }
+
     onMouseDown(event: cc.Event.EventMouse) {
-        
+        // let direc = this.getGunPos();
+        // console.log(direc);
+        //this.movePlayer(direc);
     }
 
     onMouseMove(event: cc.Event.EventMouse){
