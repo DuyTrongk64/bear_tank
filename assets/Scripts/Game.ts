@@ -30,9 +30,6 @@ export default class NewClass extends cc.Component {
 
     private deltaTime: number;
     onLoad() {
-        let physics_manager = cc.director.getPhysicsManager();
-        physics_manager.enabled = true;
-        physics_manager.gravity = cc.v2(0,0);
 
         this.node.on(cc.Node.EventType.MOUSE_DOWN, this.onMouseDown, this);
         this.node.on(cc.Node.EventType.MOUSE_MOVE, this.onMouseMove, this);
@@ -50,40 +47,50 @@ export default class NewClass extends cc.Component {
     
 
     private onMouseDown(event: cc.Event.EventMouse) {
-        let gunPos = this.player.getComponent('Player').getGunPos();
-        console.log(`gun pos: ${gunPos}`);
-        // cc.tween(this.player)
-        // .by(1,{position: gunPos})
-        // .start();
-        // this.player.movePlayer(gunPos);
-        // let playerPos = this.player.getComponent('Player').getPLayerPos();
-        // console.log(`playerPos: ${playerPos}`);
-        // let direc = playerPos.sub(gunPos);
-        // console.log(`direc: ${direc}`);
-        // this.player.getComponent('Player').Rigid_Body.applyForceToCenter(cc.v2(direc.x*this.speed,direc.y*this.speed),true);
-        // let newPosition = this.player.node.position.add(direc.multiplyScalar(this.speed*this.deltaTime));
-        // this.player.node.setPosition(newPosition);
+        let playerPos = this.player.getPosition();
+        console.log(`playerPos : ${playerPos}`);
+        //let tankPos = this.node.convertToNodeSpaceAR(playerPos);
+
+        // console.log(tankPos);
+        let mousePos = event.getLocation();
+        let localPos = this.node.convertToNodeSpaceAR(mousePos);
+        console.log(`localPos : ${localPos}`);
+
+        let moveVec = playerPos.sub(localPos);
+
+        let moveLength = 100; // Chiều dài đoạn di chuyển
+        let distance = moveLength / moveVec.mag(); // Khoảng cách di chuyển
+        let movementVec = moveVec.mul(distance); // Vector di chuyển node
+
+        let movementVector = new cc.Vec3(movementVec.x,movementVec.y,0);
+        let duration = 0.1;
+        cc.tween(this.player)
+        .to(duration, { position: this.player.position.add(movementVector) })
+        .start();
+        
     }
 
     onMouseMove(event: cc.Event.EventMouse){
         let playerPos = this.player.getPosition();
-        let tankPos = new cc.Vec2(playerPos.x,playerPos.y);
+        //console.log(playerPos);
+        let tankPos = this.node.convertToNodeSpaceAR(playerPos);
         let mousePos = event.getLocation();
         let localPos = this.node.convertToNodeSpaceAR(mousePos);
         let angle = localPos.signAngle(tankPos);
         let angleDegrees  = cc.misc.radiansToDegrees(angle);
-        angleDegrees +=5;
+        angleDegrees +=148;
         this.angleD = angleDegrees - this.angleOld;
         this.angleOld = angleDegrees;
         //console.log(this.angleD);
         // // Xoay sprite của Player
         this.player.angle = -angleDegrees;
+        
     }
 
-    rotatePlayer(dt: number){
-        let rotateAction = cc.rotateBy(dt, this.angleD*dt);
-        this.player.runAction(rotateAction);
+    plShot(){
+        
     }
+    
     update(dt) {
         
     }
