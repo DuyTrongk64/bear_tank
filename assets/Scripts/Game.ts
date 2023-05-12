@@ -48,24 +48,26 @@ export default class NewClass extends cc.Component {
 
     private onMouseDown(event: cc.Event.EventMouse) {
         let playerPos = this.player.getPosition();
-        console.log(`playerPos : ${playerPos}`);
-        //let tankPos = this.node.convertToNodeSpaceAR(playerPos);
+        //console.log(`playerPos : ${playerPos}`);
+        let tankPos = this.node.convertToNodeSpaceAR(playerPos);
 
         // console.log(tankPos);
         let mousePos = event.getLocation();
         let localPos = this.node.convertToNodeSpaceAR(mousePos);
-        console.log(`localPos : ${localPos}`);
+        //console.log(`localPos : ${localPos}`);
 
-        let moveVec = playerPos.sub(localPos);
+        let moveVec = tankPos.sub(localPos);
 
         let moveLength = 100; // Chiều dài đoạn di chuyển
         let distance = moveLength / moveVec.mag(); // Khoảng cách di chuyển
         let movementVec = moveVec.mul(distance); // Vector di chuyển node
-
+        console.log(movementVec);
         let movementVector = new cc.Vec3(movementVec.x,movementVec.y,0);
         let duration = 0.1;
+        
         cc.tween(this.player)
-        .to(duration, { position: this.player.position.add(movementVector) })
+        //.to(duration, { position: this.player.position.add(movementVector) })
+        .to(1, { position: movementVector })
         .start();
         
     }
@@ -74,8 +76,10 @@ export default class NewClass extends cc.Component {
         let playerPos = this.player.getPosition();
         //console.log(playerPos);
         let tankPos = this.node.convertToNodeSpaceAR(playerPos);
+
         let mousePos = event.getLocation();
         let localPos = this.node.convertToNodeSpaceAR(mousePos);
+
         let angle = localPos.signAngle(tankPos);
         let angleDegrees  = cc.misc.radiansToDegrees(angle);
         angleDegrees +=148;
